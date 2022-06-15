@@ -40,6 +40,6 @@ ROS는 Linux에서 **Python 2 버전**으로 작동됩니다. Linux의 기본 �
 
 * ### Tutorial Indy Sorting (Demo)
 
-  * [Reference Link](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/md_fIles/Tutorial%20-%20%EC%9E%90%EB%8F%99%20%EB%B6%84%EB%A5%98%20%EA%B3%B5%EC%A0%95%20(Pick%20%26%20Place%20in%20this%20project).md)
+  * [Reference Link](https://github.com/dnflsms8/Digital-twin-Automation/blob/main/Tutorial%20Indy%20sorting.md)
 
       
