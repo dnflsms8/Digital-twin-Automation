@@ -49,26 +49,31 @@
 
 ## Hardware - Gripper
 
-##### EGP-C-64 (SCHUNK)
+##### VGC10(Vacuum Gripper)
 
-[![img](https://github.com/chaochao77/ROS_neuromeka_tutorial/raw/main/image/140.jpg)](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/image/140.jpg)
+![image](https://user-images.githubusercontent.com/84519300/174002441-122a5212-4a7f-4212-b197-89e084c95485.png)
 
 ###### Specification
 
-- 20mm의 스트로크
-- 230N의 힘 (50%, 100% 조절 가능)
-- **24V 전력공급** 필요
-- **Open, close 두개의 입력선**으로 그리퍼 **열고, 닫기 제어**
-- LED light, 스트로크 위치 감지 센서 등 출력 센서
+- **정격전압: 24[V]**, (최소 20.4[V], 최대 28.8[V])
+- 최대 15kg까지 들어올릴 수 있음 (단, Vacuum cup 사이즈와 개수에 따라 달라짐)
+- **Open, close 두개의 입력선**으로 그리퍼 **흡입, 열기 제어**
 
-###### 연결 - 플랜지, 그리퍼
+###### Vacuum cup 종류
+![image](https://user-images.githubusercontent.com/84519300/174008469-91b4f07d-c9dd-488d-840e-5396cdafa0d6.png)
+* 들어올리려는 물체의 종류에 따라 적절한 Vacuum cup을 골라야 한다
 
-그리퍼를 로봇에 장착 할 때, 로봇의 엔드툴과 그리퍼의 장착부를 호환시켜주는 부품을 플랜지라 합니다. 아래의 이미지 예시처럼 플랜지를 먼저 장착한 뒤, 그리퍼를 장착하면 됩니다.
+###### 무게-압력에 따른 필요한 Vaccum cup의 개수 (공극이 없는 물체에 대해)
+![image](https://user-images.githubusercontent.com/84519300/174006996-e7b22f54-c3af-4073-a402-abb98f4ef78f.png)
+* 15[mm]짜리를 7개 이상 혹은 30[mm]짜리를 4개 이상 혹은 40[mm]짜리를 3개 이상 달기 위해선, 커스터마이즈된 Adaptor plate가 필요함 
 
-[![img](https://github.com/chaochao77/ROS_neuromeka_tutorial/raw/main/image/150.jpg)](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/image/150.jpg)
+###### Adaptor plate
+![image](https://user-images.githubusercontent.com/84519300/174009286-800c5017-5b4b-4d7d-8219-55b40b0d66b8.png)
+![image](https://user-images.githubusercontent.com/84519300/174009791-7168c35e-52e5-44cd-ac07-6cb35b8eb3a1.png)
 
-1. 플랜지를 M4나사 6개와 로봇의 엔드툴 부분과 연결합니다.
-2. 그 후 위치에 맞게 그리퍼를 끼운 후, M4 육각렌치로 4개의 나사를 돌려 장착합니다.
+- 4개의 나사를 4Nm 토크로 조여서 설치할 수 있음
+- 설치 방향에 따라, Vaccum 채널(1,2)을 효율적으로 사용할 수 있음
+
 
 ###### 연결 - 컨트롤 박스
 
@@ -98,39 +103,41 @@
 
    [![img](https://github.com/chaochao77/ROS_neuromeka_tutorial/raw/main/image/141.jpg)](https://github.com/chaochao77/ROS_neuromeka_tutorial/raw/main/image/141.jpg)
 
-3. Smart D I/O에서 **8 번과 9번**의 출력에 따라 그리퍼와 연결된 **Close(blue), Open(red) 선에 0,1의 디지털 값**이 입력됩니다.
+3. Smart D I/O에서 **10 번과 11번**의 출력에 따라 그리퍼와 연결된 **Close(blue), Open(red) 선에 0,1의 디지털 값**이 입력됩니다.
 
-4. 태블릿에서 **8번을 눌러 On (초록색) , 9번을 off(회색)**을 하면 그리퍼 **열기**, 반대로 **8번을 다시 눌러 off, 9번을 눌러 on**하면 그리퍼 **닫기** 작용을 하게 됩니다.
+4. 태블릿에서 **10번을 눌러 On (초록색) , 11번을 off(회색)**을 하면 그리퍼 **흡입**, 반대로 **10번을 다시 눌러 off, 11번을 눌러 on**하면 그리퍼 **배출** 작용을 하게 됩니다.
 
-5. EGP-C-64의 경우 **Open과 Close가 { 1 ,0 } 또는 {0 , 1} 으로 입력**이 되어야 지만 열고 닫는 작용을 하게 됩니다.
+5. VGC10의 경우 **Open과 Close가 { 1 ,0 } 또는 {0 , 1} 으로 입력**이 되어야 지만 열고 닫는 작용을 하게 됩니다.
 
 ###### 제어 - ROS(INDY-10)
 
-indy6d_driver.cpp은 **ROS에서 연결된 로봇의 컨트롤 박스로 명령어를 주거나, 데이터를 받게 해주는 cpp 코드파일** 입니다. 이 곳에서 컨트롤 박스 후면 디지털 포트들(Smart DI/O)에 **입력을 받거나, 출력을 주는 명령어를 보내 그리퍼를 작동** 할 수 있습니다.
+qr_classify_robot.py에는 **ROS에서 연결된 로봇의 컨트롤 박스로 명령어를 주거나, 데이터를 받게 해주는 py 코드파일** 입니다. 이 곳에서 컨트롤 박스 후면 디지털 포트들(Smart DI/O)에 **입력을 받거나, 출력을 주는 명령어를 보내 그리퍼를 작동** 하는 코드가 포함되어 있습니다.
 
-[indy6d_driver.cpp](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/software/src/indy-ros/indy_driver/src/indy6d_driver.cpp)
 
-위의 링크로 해당 코드파일을 보면, 태블릿에서 작동한 것과 같이 8번과 9번포트로 디지털 값 입출력을 **코드 명령어를 통해 직접 전달** 할 수 있습니다.
+위의 링크로 해당 코드파일을 보면, 태블릿에서 작동한 것과 같이 10번과 11번포트로 디지털 값 입출력을 **코드 명령어를 통해 직접 전달** 해 VGC10의 흡입/배출을 조절하는 코드가 있습니다.
 
-- 그리퍼 Open
+- VGC10 흡입
 
   ```
-  int idx;
-  char val;
-  Data gripdata;
-  unsigned int len;
-  idx = 9;                                        // 9번 포트 '0' 입력
-  val = 0;
-  memcpy(gripdata.byte, &idx, sizeof(int));
-  memcpy(gripdata.byte+sizeof(int), &val, sizeof(char));
-  indySocket.sendCommand(402,gripdata,5);
-  indySocket.getFeedback(402, gripdata, len);
-  idx = 8;										// 8번 포트 '1' 입력
-  val = 1;
-  memcpy(gripdata.byte, &idx, sizeof(int));
-  memcpy(gripdata.byte+sizeof(int), &val, sizeof(char));
-  indySocket.sendCommand(402,gripdata,5);
-  indySocket.getFeedback(402, gripdata, len);
+   # 1단계: 우편이 놓여진 고정된 위치로 간다.
+        t_pos = [0.43406, -0.44675, 0.48322, -176.72, 35.65, 137.13]             # 고정된 위치
+        indy.task_move_to(t_pos) # move to 절대좌표, move by 상대좌표
+
+        while True:
+            status = indy.get_robot_status()
+            sleep(0.2)
+            if status[key[5]]==1 :
+                break
+        print('done : move1 process')
+        
+        prog = JsonProgramComponent(policy=0, resume_time=2)  # Make Json program
+        
+        
+      
+        indy.set_do(10, 0)
+        indy.set_do(11, 1) # 흡입
+       
+        print("gripper")
   ```
 
   - Data gripdata : [SocketDefine.h](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/software/src/indy-ros/indy_driver/src/SocketHandler/SocketDefine.h) 에 선언된 공용체 Data입니다. **unsigned char byte[SIZE_DATA_MAX] **에 포트 인덱스 (idx - 4byte )와 값(val - 1byte)을 넣어 sendCommand [ 402번 - SmartDI/O 입력 하나쓰기 ] 를 통해 원하는 포트에 1또는 0을 입력 할 수 있습니다.
@@ -139,28 +146,29 @@ indy6d_driver.cpp은 **ROS에서 연결된 로봇의 컨트롤 박스로 명령�
   - memcpy : 포트 입출력을 위한 명령어는 unsigned **char byte[]**에 입력된 값으로만 작동됩니다. 따라서 포트 번호 idx 와 val값이 char byte의 메모리로 넣어지려면 **memcpy를 통해 idx와 val 값이 각각 복사**되어 들어가게 됩니다.
   - indySocket.sendCommand(402,gripdata,5) : 402는 디지털 입력 하나쓰기 명령어 번호, gripdata는 넣고자 하는 공용체 Data 값 , 5는 명령어를 처리에 필요한 데이터크기 5byte 입니다.
 
-- 그리퍼 Close
+- VGC10 배출
 
   ```
-  int idx;
-  char val;
-  Data gripdata;
-  unsigned int len;
-  idx = 8;										// 8번포트 '0' 입력
-  val = 0;
-  memcpy(gripdata.byte, &idx, sizeof(int));
-  memcpy(gripdata.byte+sizeof(int), &val, sizeof(char));
-  indySocket.sendCommand(402,gripdata,5);
-  indySocket.getFeedback(402, gripdata, len);
-  idx = 9;										// 9번포트 '1' 입력
-  val = 1;
-  memcpy(gripdata.byte, &idx, sizeof(int));
-  memcpy(gripdata.byte+sizeof(int), &val, sizeof(char));
-  indySocket.sendCommand(402,gripdata,5);
-  indySocket.getFeedback(402, gripdata, len);
+  # 3단계: location에 해당되는 위치로 간다.
+        t_pos = locate_pos
+        indy.task_move_to(t_pos)
+
+        while True:
+            status = indy.get_robot_status()
+            sleep(0.2)
+            if status[key[5]]==1 :
+                break
+        print('done : move2 process')        
+
+    
+        print("gripper")   
+      
+        
+        indy.set_do(11, 0)
+        indy.set_do(10, 1) # 배출
   ```
 
-  - Open과 반대로 8번 인덱스에 0 값을, 9번 인덱스에 1값을 넣으면 작동 됩니다.
+  - Open과 반대로 11번 인덱스에 0 값을, 10번 인덱스에 1값을 넣으면 작동 됩니다.
 
 위와 같이 작성 완료 후, ROS에서 실제 로봇을 작동하는 파일을 roslaunch로 실행하게 되면 해당 명령을 처리 할때 그리퍼가 작동하게 됩니다.
 
