@@ -140,11 +140,7 @@ qr_classify_robot.py에는 **ROS에서 연결된 로봇의 컨트롤 박스로 �
         print("gripper")
   ```
 
-  - Data gripdata : [SocketDefine.h](https://github.com/chaochao77/ROS_neuromeka_tutorial/blob/main/software/src/indy-ros/indy_driver/src/SocketHandler/SocketDefine.h) 에 선언된 공용체 Data입니다. **unsigned char byte[SIZE_DATA_MAX] **에 포트 인덱스 (idx - 4byte )와 값(val - 1byte)을 넣어 sendCommand [ 402번 - SmartDI/O 입력 하나쓰기 ] 를 통해 원하는 포트에 1또는 0을 입력 할 수 있습니다.
-  - idx : 포트 번호 , int 타입
-  - val : 포트에 넣을 값 (0 또는 1) , char 타입
-  - memcpy : 포트 입출력을 위한 명령어는 unsigned **char byte[]**에 입력된 값으로만 작동됩니다. 따라서 포트 번호 idx 와 val값이 char byte의 메모리로 넣어지려면 **memcpy를 통해 idx와 val 값이 각각 복사**되어 들어가게 됩니다.
-  - indySocket.sendCommand(402,gripdata,5) : 402는 디지털 입력 하나쓰기 명령어 번호, gripdata는 넣고자 하는 공용체 Data 값 , 5는 명령어를 처리에 필요한 데이터크기 5byte 입니다.
+
 
 - VGC10 배출
 
